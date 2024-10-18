@@ -41,8 +41,9 @@ steps:
           result=$?
         elif [ "${{ parameters.skipProfile }}" == "false" ]
         then
-          echo "Not use token"
-          ./tools/sqlpackage /Action:Publish -p:ScriptDatabaseCompatibility=true /SourceFile:"$(Pipeline.Workspace)/${{ parameters.artifactNamePrefix }}$(Build.DefinitionName).Dacpac/${{ parameters.databaseName }}.dacpac" /TargetConnectionString:"${{ parameters.connectionString }}" /Profile:"$(Pipeline.Workspace)/${{ parameters.artifactNamePrefix }}$(Build.DefinitionName).Dacpac/${{ parameters.databaseName }}.publish.xml" /v:"AzureDevOpsEnvironment=${{ parameters.env }}" /v:"AzureDevOpsEnvironmentName=$(Environment.Name)" /v:"AzureDevOpsBuildNumber=$(Build.BuildNumber)" /v:"AzureDevOpsRepositoryName=$(Build.Repository.Name)" /v:"AzureDevOpsSystem=${{ parameters.system }}" /v:"AzureDevOpsSuffix=${{ parameters.suffix }}" ${{ parameters.deployParameters }}
+          echo "Use token"
+          token=$(az account get-access-token --resource https://database.windows.net/ --query accessToken --output tsv)
+          ./tools/sqlpackage /Action:Publish -p:ScriptDatabaseCompatibility=true /at:$token /SourceFile:"$(Pipeline.Workspace)/${{ parameters.artifactNamePrefix }}$(Build.DefinitionName).Dacpac/${{ parameters.databaseName }}.dacpac" /TargetConnectionString:"${{ parameters.connectionString }}" /Profile:"$(Pipeline.Workspace)/${{ parameters.artifactNamePrefix }}$(Build.DefinitionName).Dacpac/${{ parameters.databaseName }}.publish.xml" /v:"AzureDevOpsEnvironment=${{ parameters.env }}" /v:"AzureDevOpsEnvironmentName=$(Environment.Name)" /v:"AzureDevOpsBuildNumber=$(Build.BuildNumber)" /v:"AzureDevOpsRepositoryName=$(Build.Repository.Name)" /v:"AzureDevOpsSystem=${{ parameters.system }}" /v:"AzureDevOpsSuffix=${{ parameters.suffix }}" ${{ parameters.deployParameters }}
           result=$?
         else
           echo "Not use token"
