@@ -31,7 +31,12 @@ steps:
       scriptType: bash
       scriptLocation: inlineScript
       inlineScript:  |
-        if [ "${{ parameters.skipProfile }}" == "false" ]
+        if [ "${{ parameters.useToken }}" == "true" ]
+        then
+          token=$(az account get-access-token --resource https://database.windows.net/ --query accessToken --output tsv)
+          ./tools/sqlpackage /Action:Publish -p:ScriptDatabaseCompatibility=true /SourceFile:"$(Pipeline.Workspace)/${{ parameters.artifactNamePrefix }}$(Build.DefinitionName).Dacpac/${{ parameters.databaseName }}.dacpac" /TargetConnectionString:"${{ parameters.connectionString }}" /Profile:"$(Pipeline.Workspace)/${{ parameters.artifactNamePrefix }}$(Build.DefinitionName).Dacpac/${{ parameters.databaseName }}.publish.xml" /v:"AzureDevOpsEnvironment=${{ parameters.env }}" /v:"AzureDevOpsEnvironmentName=$(Environment.Name)" /v:"AzureDevOpsBuildNumber=$(Build.BuildNumber)" /v:"AzureDevOpsRepositoryName=$(Build.Repository.Name)" /v:"AzureDevOpsSystem=${{ parameters.system }}" /v:"AzureDevOpsSuffix=${{ parameters.suffix }}" ${{ parameters.deployParameters }} /at:"$token"
+          result=$?
+        elif [ "${{ parameters.skipProfile }}" == "false" ]
         then
           ./tools/sqlpackage /Action:Publish -p:ScriptDatabaseCompatibility=true /SourceFile:"$(Pipeline.Workspace)/${{ parameters.artifactNamePrefix }}$(Build.DefinitionName).Dacpac/${{ parameters.databaseName }}.dacpac" /TargetConnectionString:"${{ parameters.connectionString }}" /Profile:"$(Pipeline.Workspace)/${{ parameters.artifactNamePrefix }}$(Build.DefinitionName).Dacpac/${{ parameters.databaseName }}.publish.xml" /v:"AzureDevOpsEnvironment=${{ parameters.env }}" /v:"AzureDevOpsEnvironmentName=$(Environment.Name)" /v:"AzureDevOpsBuildNumber=$(Build.BuildNumber)" /v:"AzureDevOpsRepositoryName=$(Build.Repository.Name)" /v:"AzureDevOpsSystem=${{ parameters.system }}" /v:"AzureDevOpsSuffix=${{ parameters.suffix }}" ${{ parameters.deployParameters }}
           result=$?
