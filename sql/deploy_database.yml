@@ -33,8 +33,8 @@ steps:
       scriptType: bash
       scriptLocation: inlineScript
       inlineScript:  |
-        useToken="${{ parameters.useToken }}"
-        skipProfile="${{ parameters.skipProfile }}"
+        useToken=$(echo "${{ parameters.useToken }}" | tr '[:upper:]' '[:lower:]')
+        skipProfile=$(echo "${{ parameters.skipProfile }}" | tr '[:upper:]' '[:lower:]')
 
         echo "Pipeline useToken equals ${{ parameters.useToken }}"
         echo "Pipeline skipProfile equals ${{ parameters.skipProfile }}"
