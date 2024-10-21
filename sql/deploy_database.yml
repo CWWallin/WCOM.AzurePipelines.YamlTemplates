@@ -39,12 +39,12 @@ steps:
         echo "useToken equals $useToken"
         echo "skipProfile equals $skipProfile"
 
-        if [ "$useToken" == "true" ]; then
+        if [ "$useToken" = "true" ]; then
           echo "Use token with param"
           token=$(az account get-access-token --resource https://database.windows.net/ --query accessToken --output tsv)
           ./tools/sqlpackage /Action:Publish -p:ScriptDatabaseCompatibility=true /at:$token /SourceFile:"$(Pipeline.Workspace)/${{ parameters.artifactNamePrefix }}$(Build.DefinitionName).Dacpac/${{ parameters.databaseName }}.dacpac" /TargetConnectionString:"${{ parameters.connectionString }}" /Profile:"$(Pipeline.Workspace)/${{ parameters.artifactNamePrefix }}$(Build.DefinitionName).Dacpac/${{ parameters.databaseName }}.publish.xml" /v:"AzureDevOpsEnvironment=${{ parameters.env }}" /v:"AzureDevOpsEnvironmentName=$(Environment.Name)" /v:"AzureDevOpsBuildNumber=$(Build.BuildNumber)" /v:"AzureDevOpsRepositoryName=$(Build.Repository.Name)" /v:"AzureDevOpsSystem=${{ parameters.system }}" /v:"AzureDevOpsSuffix=${{ parameters.suffix }}" ${{ parameters.deployParameters }}
           result=$?
-        elif [ "$skipProfile" == "false" ]; then
+        elif [ "$skipProfile" = "false" ]; then
           echo "Use token with skipProfile"
           token=$(az account get-access-token --resource https://database.windows.net/ --query accessToken --output tsv)
           ./tools/sqlpackage /Action:Publish -p:ScriptDatabaseCompatibility=true /at:$token /SourceFile:"$(Pipeline.Workspace)/${{ parameters.artifactNamePrefix }}$(Build.DefinitionName).Dacpac/${{ parameters.databaseName }}.dacpac" /TargetConnectionString:"${{ parameters.connectionString }}" /Profile:"$(Pipeline.Workspace)/${{ parameters.artifactNamePrefix }}$(Build.DefinitionName).Dacpac/${{ parameters.databaseName }}.publish.xml" /v:"AzureDevOpsEnvironment=${{ parameters.env }}" /v:"AzureDevOpsEnvironmentName=$(Environment.Name)" /v:"AzureDevOpsBuildNumber=$(Build.BuildNumber)" /v:"AzureDevOpsRepositoryName=$(Build.Repository.Name)" /v:"AzureDevOpsSystem=${{ parameters.system }}" /v:"AzureDevOpsSuffix=${{ parameters.suffix }}" ${{ parameters.deployParameters }}
