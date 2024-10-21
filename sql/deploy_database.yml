@@ -36,6 +36,9 @@ steps:
         useToken="${{ parameters.useToken }}"
         skipProfile="${{ parameters.skipProfile }}"
 
+        echo "Pipeline useToken equals ${{ parameters.useToken }}"
+        echo "Pipeline skipProfile equals ${{ parameters.skipProfile }}"
+
         echo "useToken equals $useToken"
         echo "skipProfile equals $skipProfile"
 
