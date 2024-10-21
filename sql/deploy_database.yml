@@ -34,15 +34,16 @@ steps:
       scriptLocation: inlineScript
       inlineScript:  |
         if [ "$useToken" = "True" ]; then
-          echo "Use token with param"
+          echo "Use token"
           token=$(az account get-access-token --resource https://database.windows.net/ --query accessToken --output tsv)
           ./tools/sqlpackage /Action:Publish -p:ScriptDatabaseCompatibility=true /at:$token /SourceFile:"$(Pipeline.Workspace)/${{ parameters.artifactNamePrefix }}$(Build.DefinitionName).Dacpac/${{ parameters.databaseName }}.dacpac" /TargetConnectionString:"${{ parameters.connectionString }}" /Profile:"$(Pipeline.Workspace)/${{ parameters.artifactNamePrefix }}$(Build.DefinitionName).Dacpac/${{ parameters.databaseName }}.publish.xml" /v:"AzureDevOpsEnvironment=${{ parameters.env }}" /v:"AzureDevOpsEnvironmentName=$(Environment.Name)" /v:"AzureDevOpsBuildNumber=$(Build.BuildNumber)" /v:"AzureDevOpsRepositoryName=$(Build.Repository.Name)" /v:"AzureDevOpsSystem=${{ parameters.system }}" /v:"AzureDevOpsSuffix=${{ parameters.suffix }}" ${{ parameters.deployParameters }}
           result=$?
-        elif [ "${{ parameters.skipProfile }}" == "False" ]
-        then
+        elif [ "${{ parameters.skipProfile }}" == "False" ]; then
+          echo "Use skipProfile"
           ./tools/sqlpackage /Action:Publish -p:ScriptDatabaseCompatibility=true /SourceFile:"$(Pipeline.Workspace)/${{ parameters.artifactNamePrefix }}$(Build.DefinitionName).Dacpac/${{ parameters.databaseName }}.dacpac" /TargetConnectionString:"${{ parameters.connectionString }}" /Profile:"$(Pipeline.Workspace)/${{ parameters.artifactNamePrefix }}$(Build.DefinitionName).Dacpac/${{ parameters.databaseName }}.publish.xml" /v:"AzureDevOpsEnvironment=${{ parameters.env }}" /v:"AzureDevOpsEnvironmentName=$(Environment.Name)" /v:"AzureDevOpsBuildNumber=$(Build.BuildNumber)" /v:"AzureDevOpsRepositoryName=$(Build.Repository.Name)" /v:"AzureDevOpsSystem=${{ parameters.system }}" /v:"AzureDevOpsSuffix=${{ parameters.suffix }}" ${{ parameters.deployParameters }}
           result=$?
         else
+          echo "Use else"
           ./tools/sqlpackage /Action:Publish -p:ScriptDatabaseCompatibility=true /SourceFile:"$(Pipeline.Workspace)/${{ parameters.artifactNamePrefix }}$(Build.DefinitionName).Dacpac/${{ parameters.databaseName }}.dacpac" /TargetConnectionString:"${{ parameters.connectionString }}" /v:"AzureDevOpsEnvironment=${{ parameters.env }}" /v:"AzureDevOpsEnvironmentName=$(Environment.Name)" /v:"AzureDevOpsBuildNumber=$(Build.BuildNumber)" /v:"AzureDevOpsRepositoryName=$(Build.Repository.Name)" /v:"AzureDevOpsSystem=${{ parameters.system }}" /v:"AzureDevOpsSuffix=${{ parameters.suffix }}" ${{ parameters.deployParameters }}
           result=$?
         fi
