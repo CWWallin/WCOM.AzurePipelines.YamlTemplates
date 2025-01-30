@@ -36,7 +36,7 @@ stages:
           targetType: 'inline'
           script: |
             Invoke-WebRequest -Uri 'https://github.com/microsoft/Microsoft-Win32-Content-Prep-Tool/raw/master/IntuneWinAppUtil.exe' -OutFile $(Build.Repository.LocalPath)/IntuneWinAppUtil.exe
-            $(Build.Repository.LocalPath)/IntuneWinAppUtil.exe -c $(Build.Repository.LocalPath)/src/$(Build.Repository.Name)/ -s $(Build.Repository.LocalPath)/src/$(Build.Repository.Name)/${{ parameters.appName }}.exe -o $(Build.Repository.LocalPath)/IntunePackage/ -q -a
+            $(Build.Repository.LocalPath)/IntuneWinAppUtil.exe -c $(Build.Repository.LocalPath)/src/$(Build.Repository.Name)/ -a $(Build.Repository.LocalPath)/src/$(Build.Repository.Name)/ -s $(Build.Repository.LocalPath)/src/$(Build.Repository.Name)/${{ parameters.appName }}.exe -o $(Build.Repository.LocalPath)/IntunePackage/ -q
             Rename-Item $(Build.Repository.LocalPath)/IntunePackage/${{ parameters.appName }}.intunewin $(Build.Repository.LocalPath)/IntunePackage/$(Build.DefinitionName).intunewin
 
       - task: ArchiveFiles@2
