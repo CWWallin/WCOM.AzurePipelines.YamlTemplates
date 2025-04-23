@@ -13,6 +13,7 @@ Azure DevOps Pipelines YAML template used to build, provision, and deploy .NET A
  azureSubscription       | string   | No           | format('azdo-{0}-{1}-{2}-{3}', devopsOrg, system, env, suffix) | The Azure Subscription name.
  azureSubscriptionFormat | string   | No           | 'azdo-{0}-{1}-{2}-{3}'                                         | The format for the azureSubscription.
  useDotNetSDK            | object   | No           |                                                                | Object containing parameters for specified dotnet SDK.
+ installAzd              | boolean  | No           | false                                                          | Boolean to determine if Azure Developer Cli should be installed, default to false.
  shouldDeploy            | boolean  | No           | true                                                           | Conditional flag to control whether deployment should occur.
  sources                 | object   | No           |                                                                | NuGet feeds to authenticate against.
  dependsOn               | array    | No           |                                                                | Allows for build to depend on an optional stage.
